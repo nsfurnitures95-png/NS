@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NS Furniture - Gallery</title>
+    <style>
+        /* --- CSS Reset & Google Fonts --- */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #fdfdfd;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* --- Header & Navigation --- */
+        header {
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #2c3e50;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: #b88e2f;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #b88e2f;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=1600&auto=format&fit=crop') no-repeat center center/cover;
+            height: 65vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+        }
+
+        .hero-content h1 {
+            font-size: 3.2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .btn-view {
+            background-color: #b88e2f;
+            color: white;
+            padding: 0.8rem 2.2rem;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: background 0.3s, transform 0.2s;
+            display: inline-block;
+        }
+
+        .btn-view:hover {
+            background-color: #967324;
+            transform: translateY(-2px);
+        }
+
+        /* --- About Section --- */
+        .about-section {
+            max-width: 1200px;
+            margin: 6rem auto;
+            padding: 0 5%;
+            text-align: center;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.15rem;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        /* --- Gallery Section --- */
+        .gallery-section {
+            max-width: 1200px;
+            margin: 6rem auto;
+            padding: 0 5%;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 3.5rem;
+            position: relative;
+            color: #2c3e50;
+        }
+
+        .section-title::after {
+            content: '';
+            width: 50px;
+            height: 3px;
+            background-color: #b88e2f;
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.04);
+            height: 300px;
+            cursor: pointer;
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        /* Hover Effect for Gallery */
+        .gallery-item:hover .gallery-img {
+            transform: scale(1.08);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            display: flex;
+            align-items: flex-end;
+            padding: 1.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .item-title {
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 600;
+            transform: translateY(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover .item-title {
+            transform: translateY(0);
+        }
+
+        /* --- Lightbox Modal Styles --- */
+        .lightbox-modal {
+            display: none; 
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.92);
+            justify-content: center;
+            align-items: center;
+            user-select: none;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 25px;
+            right: 35px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+            z-index: 2010;
+        }
+
+        .close-btn:hover {
+            color: #b88e2f;
+        }
+
+        .img-container {
+            overflow: hidden;
+            max-width: 85%;
+            max-height: 80%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: transform 0.2s ease;
+            cursor: zoom-in;
+        }
+
+        .zoom-controls-hint {
+            position: absolute;
+            bottom: 30px;
+            color: #aaa;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* --- Contact & Info Section --- */
+        .contact-section {
+            background-color: #fcf8f2;
+            padding: 6rem 5%;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: start; /* இரண்டு பகுதிகளும் சமமாக மேல் மட்டத்தில் இருக்க உதவும் */
+        }
+
+        .contact-info {
+            text-align: left;
+        }
+
+        .contact-info h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+
+        .info-block {
+            margin-bottom: 1.5rem;
+        }
+
+        .info-block strong {
+            display: block;
+            color: #b88e2f;
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .info-block p {
+            color: #555;
+            font-size: 1.1rem;
+        }
+
+        .contact-form-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+
+        .contact-form-container input, .contact-form-container textarea {
+            width: 100%;
+            padding: 0.85rem;
+            margin-bottom: 1.2rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            outline: none;
+            background-color: #fafafa;
+            font-size: 0.95rem;
+        }
+
+        .contact-form-container input:focus, .contact-form-container textarea:focus {
+            border-color: #b88e2f;
+            background-color: #fff;
+        }
+
+        .btn-submit {
+            background-color: #b88e2f;
+            color: white;
+            border: none;
+            padding: 0.85rem 2rem;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+            font-size: 1rem;
+        }
+
+        .btn-submit:hover {
+            background-color: #967324;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: #2c3e50;
+            color: #a0aec0;
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.95rem;
+            border-top: 1px solid #34495e;
+        }
+
+        /* சாதாரணமாக வெப்சைட் தமிழில் இருக்கும்போது ஆங்கில முகவரியை மறைத்து வைக்கிறோம் */
+        .english-addr {
+            display: none;
+        }
+
+        /* எப்போ கூகுள் ட்ரான்ஸ்லேட் ஆன் ஆகுதோ, அப்போ தமிழ் முகவரியை மறைக்கிறோம் */
+        html.translated-ltr .tamil-addr,
+        html.translated-rtl .tamil-addr {
+            display: none !important;
+        }
+
+        /* எப்போ கூகுள் ட்ரான்ஸ்லேட் ஆன் ஆகுதோ, அப்போ ஆங்கில முகவரியைக் காட்டுகிறோம் */
+        html.translated-ltr .english-addr,
+        html.translated-rtl .english-addr {
+            display: block !important;
+        }
+
+        /* கூகுள் ட்ரான்ஸ்லேட் ஆன் செய்யும்போது Grid உடையாமல் இருக்க Flexbox பாதுகாப்பு */
+        html.translated-ltr .contact-grid,
+        html.translated-rtl .contact-grid {
+            display: flex !important;
+            flex-wrap: wrap !important;
+        }
+
+        html.translated-ltr .contact-info, html.translated-ltr .contact-form-container,
+        html.translated-rtl .contact-info, html.translated-rtl .contact-form-container {
+            flex: 1 1 350px !important;
+        }
+    </style>
+</head>
+<body>
+
+    <header id="home">
+        <nav class="navbar">
+            <div class="logo">NS <span>Furniture</span></div>
+            <ul class="nav-links">
+                <li><a href="#home">முகப்பு</a></li>
+                <li><a href="#about">எங்களைப் பற்றி</a></li>
+                <li><a href="#gallery">தொகுப்பு</a></li>
+                <li><a href="#contact">தொடர்புகளுக்கு</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>உங்கள் இல்லத்திற்கான சிறந்த தளபாடங்கள்</h1>
+            <p>உயர்தர மற்றும் நவீன வடிவமைப்புடன் கூடிய தளபாடங்களின் அழகிய தொகுப்பு.</p>
+            <a href="#gallery" class="btn-view">தொகுப்பைப் பார்வையிடுக</a>
+        </div>
+    </section>
+
+    <section class="about-section" id="about">
+        <h2 class="section-title">எங்களைப் பற்றி</h2>
+        <div class="about-content">
+            <p>நாங்கள் வாடிக்கையாளர்களின் நம்பிக்கையைப் பெற்று, மிகச் சிறந்த மரத்தாலான மற்றும் நவீன ரகத் தளபாடங்களை நேர்த்தியான வடிவமைப்பில் வழங்கி வருகிறோம். உங்கள் வீட்டின் தேவைகளுக்கேற்ப தனித்துவமான முறையில் தளபாடங்களை வடிவமைத்து வழங்குவதே எங்களின் முதன்மை நோக்கமாகும்.</p>
+        </div>
+    </section>
+
+    <section class="gallery-section" id="gallery">
+        <h2 class="section-title">எமது தயாரிப்புகளின் தொகுப்பு</h2>
+        <div class="gallery-grid" id="galleryGrid"></div>
+    </section>
+
+    <div id="lightboxModal" class="lightbox-modal">
+        <span class="close-btn" onclick="closeLightbox()">&times;</span>
+        <div class="img-container">
+            <img id="lightboxImg" class="lightbox-img" src="" alt="Zoomable Furniture Image">
+        </div>
+        <div class="zoom-controls-hint">Scroll using Mouse Wheel to Zoom In/Out | Click & Drag to Panning</div>
+    </div>
+
+    <section class="contact-section" id="contact">
+        <div class="contact-grid">
+            
+            <!-- இடது பக்கம்: தொடர்பு விபரங்கள் -->
+            <div class="contact-info">
+                <h2>தொடர்புகளுக்கு</h2>
+                <p style="color: #666; margin-bottom: 2rem;">எமது தயாரிப்புகள் பற்றிய மேலதிக விபரங்களுக்கு நேரடியாக எமது கிளைக்கு விஜயம் செய்யவோ அல்லது தொலைபேசி ஊடாகவோ தொடர்பு கொள்ள முடியும்.</p>
+                
+                <div class="info-block">
+                    <strong>📍 முகவரி (Address):</strong>
+                    <!-- தமிழ் முகவரி: ஆங்கிலத்திற்கு மாறும்போது இது மறைந்துவிடும் -->
+                    <p class="tamil-addr">
+                        NS Furniture,<br>
+                        நியூ செம்மணி வீதி, கல்வியங்காடு, <br>யாழ்ப்பாணம், இலங்கை.
+                    </p>
+                    <!-- ஆங்கில முகவரி: தமிழில் இருக்கும்போது இது மறைந்திருக்கும் -->
+                    <p class="english-addr" translate="no">
+                        NS Furniture,<br>
+                        New Semmani Road, Kalviyankaadu,<br>
+                        Jaffna, Sri Lanka.
+                    </p>
+                </div>
+
+                <div class="info-block">
+                    <strong>📞 தொலைபேசி (Telephone):</strong>
+                    <p>+94 75 838 9764</p>
+                    <br>
+                    <p>+94 77 517 5625</p>
+                </div>
+
+                <div class="info-block">
+                    <strong>✉️ மின்னஞ்சல் (Email):</strong>
+                    <p>nsfurnitures95@gmail.com</p>
+                </div>
+            </div> <!-- கச்சிதமாக மூடப்பட்ட contact-info தற்போது கிரிட்டுக்குள் உள்ளது -->
+
+            <!-- வலது பக்கம்: மெசேஜ் ஃபார்ம் -->
+            <div class="contact-form-container">
+                <h3 style="margin-bottom: 1.5rem; color: #2c3e50;">எங்களுக்கு செய்தி அனுப்புங்கள்</h3>
+                <form id="contactForm" onsubmit="handleContact(event)">
+                    <input type="text" id="name" placeholder="உங்கள் பெயர்" required>
+                    <input type="email" id="email" placeholder="மின்னஞ்சல் முகவரி" required>
+                    <textarea id="message" rows="5" placeholder="உங்களுக்கு தேவையான தளபாடம் பற்றிய விபரங்கள்..." required></textarea>
+                    <button type="submit" class="btn-submit">அனுப்புக</button>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 NS Furniture. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p>
+    </footer>
+
+    <script>
+        // 1. Images Array
+        const productImages = [
+            { src: "images/IMG-20260605-WA0001.jpg", title: "சிறப்பு வடிவமைப்பு 1" },
+            { src: "images/IMG-20260605-WA0002.jpg", title: "சிறப்பு வடிவமைப்பு 2" },
+            { src: "images/IMG-20260605-WA0003.jpg", title: "சிறப்பு வடிவமைப்பு 3" },
+            { src: "images/IMG-20260605-WA0004.jpg", title: "சிறப்பு வடிவமைப்பு 4" },
+            { src: "images/IMG-20260605-WA0005.jpg", title: "சிறப்பு வடிவமைப்பு 5" },
+            { src: "images/IMG-20260605-WA0006.jpg", title: "சிறப்பு வடிவமைப்பு 6" },
+            { src: "images/IMG-20260605-WA0007.jpg", title: "சிறப்பு வடிவமைப்பு 7" },
+            { src: "images/IMG-20260605-WA0008.jpg", title: "சிறப்பு வடிவமைப்பு 8" },
+            { src: "images/IMG-20260605-WA0009.jpg", title: "சிறப்பு வடிவமைப்பு 9" },
+            { src: "images/IMG-20260605-WA0010.jpg", title: "சிறப்பு வடிவமைப்பு 10" },
+            { src: "images/IMG-20260605-WA0011.jpg", title: "சிறப்பு வடிவமைப்பு 11" },
+            { src: "images/IMG-20260605-WA0012.jpg", title: "சிறப்பு வடிவமைப்பு 12" },
+            { src: "images/IMG-20260605-WA0013.jpg", title: "சிறப்பு வடிவமைப்பு 13" },
+            { src: "images/IMG-20260605-WA0014.jpg", title: "சிறப்பு வடிவமைப்பு 14" },
+            { src: "images/IMG-20260605-WA0015.jpg", title: "சிறப்பு வடிவமைப்பு 15" },
+            { src: "images/IMG-20260605-WA0016.jpg", title: "சிறப்பு வடிவமைப்பு 16" },
+            { src: "images/IMG-20260605-WA0017.jpg", title: "சிறப்பு வடிவமைப்பு 17" },
+            { src: "images/IMG-20260605-WA0018.jpg", title: "சிறப்பு வடிவமைப்பு 18" },
+            { src: "images/IMG-20260605-WA0019.jpg", title: "சிறப்பு வடிவமைப்பு 19" },
+            { src: "images/IMG-20260605-WA0020.jpg", title: "சிறப்பு வடிவமைப்பு 20" },
+            { src: "images/IMG-20260605-WA0021.jpg", title: "சிறப்பு வடிவமைப்பு 21" },
+            { src: "images/IMG-20260605-WA0022.jpg", title: "சிறப்பு வடிவமைப்பு 22" },
+            { src: "images/IMG-20260605-WA0023.jpg", title: "சிறப்பு வடிவமைப்பு 23" },
+            { src: "images/IMG-20260605-WA0024.jpg", title: "சிறப்பு வடிவமைப்பு 24" },
+            { src: "images/IMG-20260605-WA0025.jpg", title: "சிறப்பு வடிவமைப்பு 25" },
+            { src: "images/IMG-20260605-WA0026.jpg", title: "சிறப்பு வடிவமைப்பு 26" },
+            { src: "images/IMG-20260605-WA0027.jpg", title: "சிறப்பு வடிவமைப்பு 27" },
+            { src: "images/IMG-20260605-WA0028.jpg", title: "சிறப்பு வடிவமைப்பு 28" },
+            { src: "images/IMG-20260605-WA0029.jpg", title: "சிறப்பு வடிவமைப்பு 29" },
+            { src: "images/IMG-20260605-WA0030.jpg", title: "சிறப்பு வடிவமைப்பு 30" },
+            { src: "images/IMG-20260605-WA0031.jpg", title: "சிறப்பு வடிவமைப்பு 31" },
+            { src: "images/IMG-20260605-WA0032.jpg", title: "சிறப்பு வடிவமைப்பு 32" },
+            { src: "images/IMG-20260605-WA0033.jpg", title: "சிறப்பு வடிவமைப்பு 33" },
+            { src: "images/IMG-20260605-WA0034.jpg", title: "சிறப்பு வடிவமைப்பு 34" },
+            { src: "images/IMG-20260605-WA0035.jpg", title: "சிறப்பு வடிவமைப்பு 35" },
+            { src: "images/IMG-20260605-WA0036.jpg", title: "சிறப்பு வடிவமைப்பு 36" },
+            { src: "images/IMG-20260605-WA0037.jpg", title: "சிறப்பு வடிவமைப்பு 37" },
+            { src: "images/IMG-20260605-WA0038.jpg", title: "சிறப்பு வடிவமைப்பு 38" },
+            { src: "images/IMG-20260605-WA0039.jpg", title: "சிறப்பு வடிவமைப்பு 39" },
+            { src: "images/IMG-20260605-WA0040.jpg", title: "சிறப்பு வடிவமைப்பு 40" },
+            { src: "images/IMG-20260605-WA0041.jpg", title: "சிறப்பு வடிவமைப்பு 41" },
+            { src: "images/IMG-20260605-WA0042.jpg", title: "சிறப்பு வடிவமைப்பு 42" },
+            { src: "images/IMG-20260605-WA0043.jpg", title: "சிறப்பு வடிவமைப்பு 43" },
+            { src: "images/IMG-20260605-WA0044.jpg", title: "சிறப்பு வடிவமைப்பு 44" },
+            { src: "images/IMG-20260605-WA0045.jpg", title: "சிறப்பு வடிவமைப்பு 45" },
+            { src: "images/IMG-20260605-WA0046.jpg", title: "சிறப்பு வடிவமைப்பு 46" },
+            { src: "images/IMG-20260605-WA0047.jpg", title: "சிறப்பு வடிவமைப்பு 47" },
+            { src: "images/IMG-20260605-WA0048.jpg", title: "சிறப்பு வடிவமைப்பு 48" },
+            { src: "images/IMG-20260605-WA0049.jpg", title: "சிறப்பு வடிவமைப்பு 49" },
+            { src: "images/IMG-20260605-WA0050.jpg", title: "சிறப்பு வடிவமைப்பு 50" },
+            { src: "images/IMG-20260605-WA0051.jpg", title: "சிறப்பு வடிவமைப்பு 51" },
+            { src: "images/IMG-20260605-WA0052.jpg", title: "சிறப்பு வடிவமைப்பு 52" },
+            { src: "images/IMG-20260605-WA0053.jpg", title: "சிறப்பு வடிவமைப்பு 53" },
+            { src: "images/IMG-20260605-WA0054.jpg", title: "சிறப்பு வடிவமைப்பு 54" },
+            { src: "images/IMG-20260605-WA0055.jpg", title: "சிறப்பு வடிவமைப்பு 55" },
+            { src: "images/IMG-20260605-WA0056.jpg", title: "சிறப்பு வடிவமைப்பு 56" },
+            { src: "images/IMG-20260605-WA0057.jpg", title: "சிறப்பு வடிவமைப்பு 57" },
+            { src: "images/IMG-20260605-WA0058.jpg", title: "சிறப்பு வடிவமைப்பு 58" },
+            { src: "images/IMG-20260605-WA0059.jpg", title: "சிறப்பு வடிவமைப்பு 59" },
+            { src: "images/IMG-20260605-WA0060.jpg", title: "சிறப்பு வடிவமைப்பு 60" },
+            { src: "images/IMG-20260605-WA0061.jpg", title: "சிறப்பு வடிவமைப்பு 61" },
+            { src: "images/IMG-20260605-WA0062.jpg", title: "சிறப்பு வடிவமைப்பு 62" },
+            { src: "images/IMG-20260605-WA0063.jpg", title: "சிறப்பு வடிவமைப்பு 63" },
+            { src: "images/IMG-20260605-WA0064.jpg", title: "சிறப்பு வடிவமைப்பு 64" },
+            { src: "images/IMG-20260605-WA0065.jpg", title: "சிறப்பு வடிவமைப்பு 65" },
+            { src: "images/IMG-20260605-WA0066.jpg", title: "சிறப்பு வடிவமைப்பு 66" },
+            { src: "images/IMG-20260605-WA0067.jpg", title: "சிறப்பு வடிவமைப்பு 67" },
+            { src: "images/IMG-20260605-WA0068.jpg", title: "சிறப்பு வடிவமைப்பு 68" },
+            { src: "images/IMG-20260605-WA0069.jpg", title: "சிறப்பு வடிவமைப்பு 69" },
+            { src: "images/IMG-20260605-WA0070.jpg", title: "சிறப்பு வடிவமைப்பு 70" },
+            { src: "images/IMG-20260605-WA0071.jpg", title: "சிறப்பு வடிவமைப்பு 71" },
+            { src: "images/IMG-20260605-WA0072.jpg", title: "சிறப்பு வடிவமைப்பு 72" },
+            { src: "images/IMG-20260605-WA0073.jpg", title: "சிறப்பு வடிவமைப்பு 73" },
+            { src: "images/IMG-20260605-WA0074.jpg", title: "சிறப்பு வடிவமைப்பு 74" },
+            { src: "images/IMG-20260605-WA0075.jpg", title: "சிறப்பு வடிவமைப்பு 75" },
+            { src: "images/IMG-20260605-WA0076.jpg", title: "சிறப்பு வடிவமைப்பு 76" },
+            { src: "images/IMG-20260605-WA0077.jpg", title: "சிறப்பு வடிவமைப்பு 77" },
+            { src: "images/IMG-20260605-WA0078.jpg", title: "சிறப்பு வடிவமைப்பு 78" },
+            { src: "images/IMG-20260605-WA0079.jpg", title: "சிறப்பு வடிவமைப்பு 79" },
+            { src: "images/IMG-20260605-WA0080.jpg", title: "சிறப்பு வடிவமைப்பு 80" },
+            { src: "images/IMG-20260605-WA0081.jpg", title: "சிறப்பு வடிவமைப்பு 81" },
+            { src: "images/IMG-20260605-WA0082.jpg", title: "சிறப்பு வடிவமைப்பு 82" },
+            { src: "images/IMG-20260605-WA0083.jpg", title: "சிறப்பு வடிவமைப்பு 83" },
+            { src: "images/IMG-20260605-WA0084.jpg", title: "சிறப்பு வடிவமைப்பு 84" },
+            { src: "images/IMG-20260605-WA0085.jpg", title: "சிறப்பு வடிவமைப்பு 85" },
+            { src: "images/IMG-20260605-WA0086.jpg", title: "சிறப்பு வடிவமைப்பு 86" },
+            { src: "images/IMG-20260605-WA0087.jpg", title: "சிறப்பு வடிவமைப்பு 87" },
+            { src: "images/IMG-20260605-WA0088.jpg", title: "சிறப்பு வடிவமைப்பு 88" },
+            { src: "images/IMG-20260605-WA0089.jpg", title: "சிறப்பு வடிவமைப்பு 89" },
+            { src: "images/IMG-20260605-WA0090.jpg", title: "சிறப்பு வடிவமைப்பு 90" },
+            { src: "images/IMG-20260605-WA0091.jpg", title: "சிறப்பு வடிவமைப்பு 91" },
+            { src: "images/IMG-20260605-WA0092.jpg", title: "சிறப்பு வடிவமைப்பு 92" },
+            { src: "images/IMG-20260605-WA0093.jpg", title: "சிறப்பு வடிவமைப்பு 93" },
+            { src: "images/IMG-20260605-WA0094.jpg", title: "சிறப்பு வடிவமைப்பு 94" },
+            { src: "images/IMG-20260605-WA0095.jpg", title: "சிறப்பு வடிவமைப்பு 95" },
+            { src: "images/IMG-20260605-WA0096.jpg", title: "சிறப்பு வடிவமைப்பு 96" },
+            { src: "images/IMG-20260605-WA0097.jpg", title: "சிறப்பு வடிவமைப்பு 97" },
+            { src: "images/IMG-20260605-WA0098.jpg", title: "சிறப்பு வடிவமைப்பு 98" },
+            { src: "images/IMG-20260605-WA0099.jpg", title: "சிறப்பு வடிவமைப்பு 99" },
+            { src: "images/IMG-20260605-WA0100.jpg", title: "சிறப்பு வடிவமைப்பு 100" }
+        ];
+
+        // 2. Generate Gallery Cards
+        const galleryGrid = document.getElementById('galleryGrid');
+        productImages.forEach(product => {
+            const item = document.createElement('div');
+            item.className = 'gallery-item';
+            item.onclick = () => openLightbox(product.src);
+
+            item.innerHTML = `
+                <img src="${product.src}" alt="${product.title}" class="gallery-img">
+                <div class="gallery-overlay">
+                    <div class="item-title">${product.title}</div>
+                </div>
+            `;
+            galleryGrid.appendChild(item);
+        });
+
+        // 3. Lightbox Interaction
+        const modal = document.getElementById('lightboxModal');
+        const modalImg = document.getElementById('lightboxImg');
+        
+        let zoomScale = 1;
+        let isMoving = false;
+        let posX = 0, posY = 0, startX = 0, startY = 0;
+
+        function openLightbox(src) {
+            modal.style.display = 'flex';
+            modalImg.src = src;
+            resetZoomState();
+        }
+
+        function closeLightbox() {
+            modal.style.display = 'none';
+        }
+
+        function resetZoomState() {
+            zoomScale = 1;
+            posX = 0;
+            posY = 0;
+            applyTransformations();
+            modalImg.style.cursor = 'zoom-in';
+        }
+
+        function applyTransformations() {
+            modalImg.style.transform = `translate(${posX}px, ${posY}px) scale(${zoomScale})`;
+        }
+
+        modalImg.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const step = 0.15;
+            if (e.deltaY < 0) {
+                zoomScale += step;
+            } else {
+                zoomScale = Math.max(1, zoomScale - step);
+            }
+
+            if (zoomScale > 1) {
+                modalImg.style.cursor = 'grab';
+            } else {
+                modalImg.style.cursor = 'zoom-in';
+                posX = 0;
+                posY = 0;
+            }
+            applyTransformations();
+        });
+
+        modalImg.addEventListener('click', (e) => {
+            if (zoomScale === 1) {
+                zoomScale = 2.5;
+                modalImg.style.cursor = 'grab';
+            } else {
+                resetZoomState();
+            }
+            applyTransformations();
+        });
+
+        modalImg.addEventListener('mousedown', (e) => {
+            if (zoomScale > 1) {
+                isMoving = true;
+                modalImg.style.cursor = 'grabbing';
+                startX = e.clientX - posX;
+                startY = e.clientY - posY;
+            }
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (isMoving) {
+                posX = e.clientX - startX;
+                posY = e.clientY - startY;
+                applyTransformations();
+            }
+        });
+
+        window.addEventListener('mouseup', () => {
+            if (isMoving) {
+                isMoving = false;
+                modalImg.style.cursor = 'grab';
+            }
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal || e.target.classList.contains('img-container')) {
+                closeLightbox();
+            }
+        });
+
+        function handleContact(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            alert("நன்றி " + name + "! உங்களது செய்தி வெற்றிகரமாகப் பெறப்பட்டது. நாம் விரைவில் உங்களைத் தொடர்பு கொள்வோம்.");
+            document.getElementById('contactForm').reset();
+        }
+    </script>
+
+</body>
+</html>
