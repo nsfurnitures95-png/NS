@@ -6,7 +6,7 @@
     <title>NS Furniture - Gallery</title>
     <style>
         /* --- CSS Reset & Google Fonts --- */
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght=300;400;600;700&display=swap');
         
         * {
             margin: 0;
@@ -156,8 +156,8 @@
 
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
         }
 
         .gallery-item {
@@ -267,6 +267,7 @@
             letter-spacing: 0.5px;
             text-align: center;
             width: 100%;
+            padding: 0 15px;
         }
 
         /* --- Contact & Info Section --- */
@@ -281,7 +282,7 @@
             gap: 4rem;
             max-width: 1200px;
             margin: 0 auto;
-            align-items: start; /* இரண்டு பகுதிகளும் சமமாக மேல் மட்டத்தில் இருக்க உதவும் */
+            align-items: start;
         }
 
         .contact-info {
@@ -360,24 +361,20 @@
             border-top: 1px solid #34495e;
         }
 
-        /* சாதாரணமாக வெப்சைட் தமிழில் இருக்கும்போது ஆங்கில முகவரியை மறைத்து வைக்கிறோம் */
         .english-addr {
             display: none;
         }
 
-        /* எப்போ கூகுள் ட்ரான்ஸ்லேட் ஆன் ஆகுதோ, அப்போ தமிழ் முகவரியை மறைக்கிறோம் */
         html.translated-ltr .tamil-addr,
         html.translated-rtl .tamil-addr {
             display: none !important;
         }
 
-        /* எப்போ கூகுள் ட்ரான்ஸ்லேட் ஆன் ஆகுதோ, அப்போ ஆங்கில முகவரியைக் காட்டுகிறோம் */
         html.translated-ltr .english-addr,
         html.translated-rtl .english-addr {
             display: block !important;
         }
 
-        /* கூகுள் ட்ரான்ஸ்லேட் ஆன் செய்யும்போது Grid உடையாமல் இருக்க Flexbox பாதுகாப்பு */
         html.translated-ltr .contact-grid,
         html.translated-rtl .contact-grid {
             display: flex !important;
@@ -387,6 +384,110 @@
         html.translated-ltr .contact-info, html.translated-ltr .contact-form-container,
         html.translated-rtl .contact-info, html.translated-rtl .contact-form-container {
             flex: 1 1 350px !important;
+        }
+
+        /* ==========================================================================
+           NEW: Mobile Responsiveness (Media Queries)
+           ========================================================================== */
+        
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+                padding: 0;
+            }
+
+            .nav-links li {
+                margin: 0 0.8rem;
+            }
+
+            .hero {
+                height: auto;
+                padding: 5rem 1rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+            }
+
+            .about-section, .gallery-section {
+                margin: 3rem auto;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+                margin-bottom: 2.5rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1rem;
+            }
+
+            .gallery-item {
+                height: 250px;
+            }
+
+            /* மொபைலில் Overlay எப்போதும் தெரியும்படி வைப்பது மொபைல் யூசர்களுக்கு வசதியாக இருக்கும் */
+            .gallery-overlay {
+                opacity: 1;
+                background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+            }
+
+            .item-title {
+                transform: translateY(0);
+                font-size: 1.1rem;
+            }
+
+            .contact-section {
+                padding: 3rem 1rem;
+            }
+
+            .contact-grid {
+                gap: 2.5rem;
+                grid-template-columns: 1fr;
+            }
+
+            .contact-form-container {
+                padding: 1.5rem;
+            }
+
+            .close-btn {
+                top: 15px;
+                right: 20px;
+                font-size: 35px;
+            }
+
+            .img-container {
+                max-width: 95%;
+                max-height: 75%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+
+            .nav-links li {
+                margin: 0 0.5rem;
+            }
+
+            .hero-content h1 {
+                font-size: 1.7rem;
+            }
         }
     </style>
 </head>
@@ -429,25 +530,22 @@
         <div class="img-container">
             <img id="lightboxImg" class="lightbox-img" src="" alt="Zoomable Furniture Image">
         </div>
-        <div class="zoom-controls-hint">Scroll using Mouse Wheel to Zoom In/Out | Click & Drag to Panning</div>
+        <div class="zoom-controls-hint" id="zoomHint">Scroll using Mouse Wheel to Zoom In/Out | Click & Drag to Panning</div>
     </div>
 
     <section class="contact-section" id="contact">
         <div class="contact-grid">
             
-            <!-- இடது பக்கம்: தொடர்பு விபரங்கள் -->
             <div class="contact-info">
                 <h2>தொடர்புகளுக்கு</h2>
                 <p style="color: #666; margin-bottom: 2rem;">எமது தயாரிப்புகள் பற்றிய மேலதிக விபரங்களுக்கு நேரடியாக எமது கிளைக்கு விஜயம் செய்யவோ அல்லது தொலைபேசி ஊடாகவோ தொடர்பு கொள்ள முடியும்.</p>
                 
                 <div class="info-block">
                     <strong>📍 முகவரி (Address):</strong>
-                    <!-- தமிழ் முகவரி: ஆங்கிலத்திற்கு மாறும்போது இது மறைந்துவிடும் -->
                     <p class="tamil-addr">
                         NS Furniture,<br>
                         நியூ செம்மணி வீதி, கல்வியங்காடு, <br>யாழ்ப்பாணம், இலங்கை.
                     </p>
-                    <!-- ஆங்கில முகவரி: தமிழில் இருக்கும்போது இது மறைந்திருக்கும் -->
                     <p class="english-addr" translate="no">
                         NS Furniture,<br>
                         New Semmani Road, Kalviyankaadu,<br>
@@ -466,9 +564,8 @@
                     <strong>✉️ மின்னஞ்சல் (Email):</strong>
                     <p>nsfurnitures95@gmail.com</p>
                 </div>
-            </div> <!-- கச்சிதமாக மூடப்பட்ட contact-info தற்போது கிரிட்டுக்குள் உள்ளது -->
+            </div>
 
-            <!-- வலது பக்கம்: மெசேஜ் ஃபார்ம் -->
             <div class="contact-form-container">
                 <h3 style="margin-bottom: 1.5rem; color: #2c3e50;">எங்களுக்கு செய்தி அனுப்புங்கள்</h3>
                 <form id="contactForm" onsubmit="handleContact(event)">
@@ -610,10 +707,16 @@
         // 3. Lightbox Interaction
         const modal = document.getElementById('lightboxModal');
         const modalImg = document.getElementById('lightboxImg');
+        const zoomHint = document.getElementById('zoomHint');
         
         let zoomScale = 1;
         let isMoving = false;
         let posX = 0, posY = 0, startX = 0, startY = 0;
+
+        // மொபைல் போன் கண்டறிதல் (Hint text மாற்றுவதற்கு)
+        if (window.innerWidth <= 768) {
+            zoomHint.innerText = "Tap to Zoom In/Out | Pinch or Drag to move";
+        }
 
         function openLightbox(src) {
             modal.style.display = 'flex';
@@ -688,6 +791,27 @@
                 isMoving = false;
                 modalImg.style.cursor = 'grab';
             }
+        });
+
+        // மொபைல் டச் சப்போர்ட் (Touch Support for Panning)
+        modalImg.addEventListener('touchstart', (e) => {
+            if (zoomScale > 1 && e.touches.length === 1) {
+                isMoving = true;
+                startX = e.touches[0].clientX - posX;
+                startY = e.touches[0].clientY - posY;
+            }
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            if (isMoving && e.touches.length === 1) {
+                posX = e.touches[0].clientX - startX;
+                posY = e.touches[0].clientY - startY;
+                applyTransformations();
+            }
+        });
+
+        window.addEventListener('touchend', () => {
+            isMoving = false;
         });
 
         modal.addEventListener('click', (e) => {
